@@ -13,5 +13,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity security) throws Exception
     {
         security.httpBasic().disable();
+        security.csrf().disable();
+        PortMapperImpl portMapper = new PortMapperImpl();
+        portMapper.setPortMappings(Collections.singletonMap("8080","8181"));
+        PortResolverImpl portResolver = new PortResolverImpl();
+        portResolver.setPortMapper(portMapper);
+        security.requiresChannel().anyRequest().requiresSecure().and().portMapper().portMapper(portMapper);
+
+        //security.portMapper().http(8080).mapsTo(8181);
+        //security
     }
 }
